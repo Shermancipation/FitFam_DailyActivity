@@ -13,24 +13,31 @@
         <% for(var idx in response.goals) { %>
             <table>
                 <tr>
-                    <td> <%= response.goals[idx].type %> </td>
+                    <th> <%= response.runner.name %>'s #<%= parseInt(idx) + 1 %> goal: </th>
+                    <!-- <td> <%= response.goals[idx].type %> </td> -->
                     <% if(response.goals[idx].type == "5k") { %>
-                        <td> 3.1 miles </td>
+                        <td> A 5k length goal of 3.1 miles! </td>
                     <% } %>
                     <% if(response.goals[idx].type == "10k") { %>
-                        <td> 6.2 miles </td>
+                        <td> A 10k length goal of 6.2 miles! </td>
                     <% } %>
                     <% if(response.goals[idx].type == "halfMarathon") { %>
-                        <td> 13.1 miles </td>
+                        <td> A half marathon goal of 13.1 miles! </td>
                     <% } %>
                     <% if(response.goals[idx].type == "custom") { %>
-                        <td> <%= response.goals[idx].custom %> miles </td>
+                        <td> A custom goal of <%= response.goals[idx].distance %> miles! </td>
                     <% } %>
-                    <td> <%= response.goals[idx].comment %></td>
+                    <% if(response.goals[idx].comment != "") { %>
+                        <td> <%= response.runner.name %> says: <%= response.goals[idx].comment %></td>
+                    <% } %>
                 </tr>
             </table>
-            <button id="addActivity">Add an activity for this goal!</button>
-            <div id="addActivityDiv" hidden>
+
+            <% if(response.goals[idx].completed == false) { %>
+                <button class="addActivity">Add an activity for this goal!</button>
+            <% } %>
+
+            <div class="addActivityDiv" hidden>
                 <form action="/newactivity" method="post">
                     <br>Date:
                     <input type="date" name="date"></br>
@@ -42,6 +49,23 @@
                     <br><input type="submit" value="Submit"><br>
                 </form>
             </div>
+
+            <% if(response.goals[idx].activities.length > 0) { %>
+                <% for(var jdx in response.goals[idx].activities) { %>
+                    <table>
+                        <tr>
+                            <td><%= response.goals[idx].activities[jdx].date %></td>
+                            <td><%= response.goals[idx].activities[jdx].distance %></td>
+                            <td><%= response.goals[idx].activities[jdx].comment %></td>
+                        </tr>
+                    </table>
+                <% } %>
+            <% } %>
+            
+            <% if(response.goals[idx].completed == true) { %>
+                <h1>You crushed your goal!  Congratulations!</h1>
+            <% } %>
+            
         <% } %>
     <% } %>
     <h1>Empower yourself to meet your personal goals.</h1>

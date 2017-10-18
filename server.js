@@ -85,7 +85,9 @@ app.post('/newactivity', function(req, res)
         distance: req.body.distance,
         comment: req.body.comment
     })
-    console.log(goalsArr);
+    for(var idx in goalsArr[req.body.goalIdx].activities){
+        console.log(goalsArr[req.body.goalIdx].activities[idx]);
+    }
     res.redirect('/');
 });
 

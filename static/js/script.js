@@ -10,8 +10,8 @@ $(document).ready(function(){
         }
       });
     
-    $("#addActivity").click(function(){
-        $("#addActivityDiv").toggle();
+    $(".addActivity").click(function(){
+        $(this).next(".addActivityDiv").toggle();
     });   
 
 });
