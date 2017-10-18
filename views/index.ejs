@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+    <title>FitFam Daily Activity</title>
+  </head>
+  <body>
+    <h1><%= response.runner.name %>'s <%= response.event %> Goals</h1>
+    <% if(response.goals.length > 0) { %>
+        <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Distance</th>
+                    <th>Comment</th>
+                </tr>
+                <% for(var idx in response.goals) { %>
+                    <tr>
+                        <td> <%= response.goals[idx].type %> </td>
+                        <% if(response.goals[idx].type == "5k") { %>
+                            <td> 3.1 miles </td>
+                        <% } %>
+                        <% if(response.goals[idx].type == "10k") { %>
+                            <td> 6.2 miles </td>
+                        <% } %>
+                        <% if(response.goals[idx].type == "halfMarathon") { %>
+                            <td> 13.1 miles </td>
+                        <% } %>
+                        <% if(response.goals[idx].type == "custom") { %>
+                            <td> <%= response.goals[idx].custom %> miles </td>
+                        <% } %>
+                        <td> <%= response.goals[idx].comment %></td>
+                    </tr>
+                <% } %>
+        </table>
+    <% } %>
+    <h1>Empower yourself to meet your personal goals.</h1>
+    <h2>Get started now!</h2>
+    <form action="/newgoal" method="post">
+        <br>Goal Type:
+        <select id="goalSelect" name="type">
+          <option value="5k">5k</option>
+          <option value="10k">10k</option>
+          <option value="halfMarathon">Half Marathon</option>
+          <option value="custom">Custom</option>
+        </select><br>
+        <div id="customGoal" hidden><br>Custom Amount (mi):
+            <input type="number" name="custom"></br></div>
+        <br>Comment:
+        <textarea rows="4" cols="50" name="comment"></textarea><br>
+        <br><input type="submit" value="Submit"><br>
+      </form>
+  </body>
+</html>
