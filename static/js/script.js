@@ -9,6 +9,10 @@ $(document).ready(function(){
             $("#customGoal").hide();
         }
       });
+    
+    $("#addActivity").click(function(){
+        $("#addActivityDiv").toggle();
+    });   
 
-    });
+});
     

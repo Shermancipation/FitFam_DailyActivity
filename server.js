@@ -27,23 +27,65 @@ var goalsArr = [];
 
 app.get('/', function(req, res)
 {
-    
-    console.log(goalsArr);
+    var activityDistance = 0;
+    for(var i = 0; i < goalsArr.length; i++)
+        {
+            for(var j = 0; j < goalsArr[i].activities.length; j++)
+                {
+                    var activityDistance = activityDistance + parseInt(goalsArr[i].activities[j].distance);
+                }
+            if(activityDistance >= parseInt(goalsArr[i].distance))
+                {
+                    goalsArr[i].completed = true;
+                }
+        }
     var response = {
         event: eventsArr[randEvent],
         runner: runnersArr[randRunner],
         goals: goalsArr
     }
+    console.log(goalsArr);
     res.render("index", {response: response});
 });
 
 app.post('/newgoal', function(req, res)
 {
+    var distance = '';
+    if(req.body.type == "5k")
+        {
+            distance = '3.1';
+        }
+    else if(req.body.type == "10k")
+        {
+            distance = '6.2';
+        }
+    else if(req.body.type == "halfMarathon")
+        {
+            distance = '13.1';
+        }
+    else
+        {
+            distance = req.body.custom;
+        }
     goalsArr.push({
         type: req.body.type,
-        custom: req.body.custom,
+        distance: distance,
+        comment: req.body.comment,
+        completed: false,
+        activities: []
+    })
+    res.redirect('/');
+});
+
+app.post('/newactivity', function(req, res)
+{
+    console.log(req.body.goalIdx);
+    goalsArr[req.body.goalIdx].activities.push({
+        date: req.body.date,
+        distance: req.body.distance,
         comment: req.body.comment
     })
+    console.log(goalsArr);
     res.redirect('/');
 });
 

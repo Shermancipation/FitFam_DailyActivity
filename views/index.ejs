@@ -9,31 +9,40 @@
   <body>
     <h1><%= response.runner.name %>'s <%= response.event %> Goals</h1>
     <% if(response.goals.length > 0) { %>
-        <table>
+        
+        <% for(var idx in response.goals) { %>
+            <table>
                 <tr>
-                    <th>Type</th>
-                    <th>Distance</th>
-                    <th>Comment</th>
+                    <td> <%= response.goals[idx].type %> </td>
+                    <% if(response.goals[idx].type == "5k") { %>
+                        <td> 3.1 miles </td>
+                    <% } %>
+                    <% if(response.goals[idx].type == "10k") { %>
+                        <td> 6.2 miles </td>
+                    <% } %>
+                    <% if(response.goals[idx].type == "halfMarathon") { %>
+                        <td> 13.1 miles </td>
+                    <% } %>
+                    <% if(response.goals[idx].type == "custom") { %>
+                        <td> <%= response.goals[idx].custom %> miles </td>
+                    <% } %>
+                    <td> <%= response.goals[idx].comment %></td>
                 </tr>
-                <% for(var idx in response.goals) { %>
-                    <tr>
-                        <td> <%= response.goals[idx].type %> </td>
-                        <% if(response.goals[idx].type == "5k") { %>
-                            <td> 3.1 miles </td>
-                        <% } %>
-                        <% if(response.goals[idx].type == "10k") { %>
-                            <td> 6.2 miles </td>
-                        <% } %>
-                        <% if(response.goals[idx].type == "halfMarathon") { %>
-                            <td> 13.1 miles </td>
-                        <% } %>
-                        <% if(response.goals[idx].type == "custom") { %>
-                            <td> <%= response.goals[idx].custom %> miles </td>
-                        <% } %>
-                        <td> <%= response.goals[idx].comment %></td>
-                    </tr>
-                <% } %>
-        </table>
+            </table>
+            <button id="addActivity">Add an activity for this goal!</button>
+            <div id="addActivityDiv" hidden>
+                <form action="/newactivity" method="post">
+                    <br>Date:
+                    <input type="date" name="date"></br>
+                    <br>Distance (miles):
+                    <input type="number" name="distance"></br>
+                    <br>Comment:
+                    <textarea rows="4" cols="50" name="comment"></textarea><br>
+                    <input type="hidden" name="goalIdx" value=<%= idx %>>
+                    <br><input type="submit" value="Submit"><br>
+                </form>
+            </div>
+        <% } %>
     <% } %>
     <h1>Empower yourself to meet your personal goals.</h1>
     <h2>Get started now!</h2>
