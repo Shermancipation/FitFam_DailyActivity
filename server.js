@@ -28,21 +28,27 @@ var goalsArr = [];
 app.get('/', function(req, res)
 {
     var activityDistance = 0;
+    var distanceToGo = 0;
+
     for(var i = 0; i < goalsArr.length; i++)
         {
             for(var j = 0; j < goalsArr[i].activities.length; j++)
                 {
-                    var activityDistance = activityDistance + parseInt(goalsArr[i].activities[j].distance);
+                    activityDistance = activityDistance + parseFloat(goalsArr[i].activities[j].distance);
                 }
-            if(activityDistance >= parseInt(goalsArr[i].distance))
+            if(activityDistance >= parseFloat(goalsArr[i].distance))
                 {
                     goalsArr[i].completed = true;
                 }
+            goalsArr[i].activityDistance = activityDistance;
+            goalsArr[i].distanceToGo = goalsArr[i].distance - activityDistance;
+            activityDistance = 0;
         }
+
     var response = {
         event: eventsArr[randEvent],
         runner: runnersArr[randRunner],
-        goals: goalsArr
+        goals: goalsArr,
     }
     console.log(goalsArr);
     res.render("index", {response: response});
@@ -72,7 +78,9 @@ app.post('/newgoal', function(req, res)
         distance: distance,
         comment: req.body.comment,
         completed: false,
-        activities: []
+        activities: [],
+        activityDistance: 0,
+        distanceToGo: 0
     })
     res.redirect('/');
 });

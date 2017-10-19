@@ -14,7 +14,6 @@
             <table>
                 <tr>
                     <th> <%= response.runner.name %>'s #<%= parseInt(idx) + 1 %> goal: </th>
-                    <!-- <td> <%= response.goals[idx].type %> </td> -->
                     <% if(response.goals[idx].type == "5k") { %>
                         <td> A 5k length goal of 3.1 miles! </td>
                     <% } %>
@@ -54,13 +53,20 @@
                 <% for(var jdx in response.goals[idx].activities) { %>
                     <table>
                         <tr>
-                            <td><%= response.goals[idx].activities[jdx].date %></td>
-                            <td><%= response.goals[idx].activities[jdx].distance %></td>
-                            <td><%= response.goals[idx].activities[jdx].comment %></td>
+                            <th>Activity #<%= parseInt(jdx) + 1 %>:</th>
+                            <td>Date: <%= response.goals[idx].activities[jdx].date %> | </td>
+                            <td>Distance: <%= response.goals[idx].activities[jdx].distance %> mile(s) | </td>
+                            <td><%= response.runner.name %> says: <%= response.goals[idx].activities[jdx].comment %> </td>
                         </tr>
                     </table>
                 <% } %>
             <% } %>
+
+            <% if(response.goals[idx].activityDistance > 0) { %>
+                <h3>Total Distance: <%= response.goals[idx].activityDistance %> mile(s)</h3>
+            <% } %>
+
+            <h3>Distance to go: <%= response.goals[idx].distanceToGo %> mile(s)</h3>
             
             <% if(response.goals[idx].completed == true) { %>
                 <h1>You crushed your goal!  Congratulations!</h1>
