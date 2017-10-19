@@ -13,47 +13,52 @@
         <% for(var idx in response.goals) { %>
             <table>
                 <tr>
-                    <th> <%= response.runner.name %>'s #<%= parseInt(idx) + 1 %> goal: </th>
+                    <!-- Populating user's existing goals, if any -->
+                    <th style="color:steelblue; font-size:1.5em"> <%= response.runner.name %>'s #<%= parseInt(idx) + 1 %> goal: </th>
                     <% if(response.goals[idx].type == "5k") { %>
-                        <td> A 5k length goal of 3.1 miles! </td>
+                        <td style="font-size:1.5em"> A 5k length goal of 3.1 miles! </td>
                     <% } %>
                     <% if(response.goals[idx].type == "10k") { %>
-                        <td> A 10k length goal of 6.2 miles! </td>
+                        <td style="font-size:1.5em"> A 10k length goal of 6.2 miles! </td>
                     <% } %>
                     <% if(response.goals[idx].type == "halfMarathon") { %>
-                        <td> A half marathon goal of 13.1 miles! </td>
+                        <td style="font-size:1.5em"> A half marathon goal of 13.1 miles! </td>
                     <% } %>
                     <% if(response.goals[idx].type == "custom") { %>
-                        <td> A custom goal of <%= response.goals[idx].distance %> miles! </td>
+                        <td style="font-size:1.5em"> A custom goal of <%= response.goals[idx].distance %> miles! </td>
                     <% } %>
                     <% if(response.goals[idx].comment != "") { %>
-                        <td> <%= response.runner.name %> says: <%= response.goals[idx].comment %></td>
+                        <td style="font-size:1.5em"> <%= response.runner.name %> says: <%= response.goals[idx].comment %></td>
                     <% } %>
                 </tr>
             </table>
 
+            <!-- Add activity button will not be available if user has already reached their goal -->
             <% if(response.goals[idx].completed == false) { %>
                 <button class="addActivity">Add an activity for this goal!</button>
             <% } %>
 
+            <!-- Hidden add activity form that triggers via JQuery on button click -->
             <div class="addActivityDiv" hidden>
                 <form action="/newactivity" method="post">
                     <br>Date:
                     <input type="date" name="date"></br>
                     <br>Distance (miles):
-                    <input type="number" name="distance"></br>
+                    <input type="number" step = "0.01" min="0" name="distance"></br>
                     <br>Comment:
                     <textarea rows="4" cols="50" name="comment"></textarea><br>
+                    <!-- Hidden input field allows tracking of goal the activities belong to -->
                     <input type="hidden" name="goalIdx" value=<%= idx %>>
                     <br><input type="submit" value="Submit"><br>
                 </form>
             </div>
 
+            <!-- Populating activities, if any, relevant to their attached goal -->
             <% if(response.goals[idx].activities.length > 0) { %>
                 <% for(var jdx in response.goals[idx].activities) { %>
                     <table>
                         <tr>
-                            <th>Activity #<%= parseInt(jdx) + 1 %>:</th>
+                            <th style="color:steelblue">Activity #<%= parseInt(jdx) + 1 %>:</th>
                             <td>Date: <%= response.goals[idx].activities[jdx].date %> | </td>
                             <td>Distance: <%= response.goals[idx].activities[jdx].distance %> mile(s) | </td>
                             <td><%= response.runner.name %> says: <%= response.goals[idx].activities[jdx].comment %> </td>
@@ -61,17 +66,20 @@
                     </table>
                 <% } %>
             <% } %>
-
+            
+            <!-- If user has posted activities, display total distance accumulated -->
             <% if(response.goals[idx].activityDistance > 0) { %>
                 <h3>Total Distance: <%= response.goals[idx].activityDistance %> mile(s)</h3>
             <% } %>
-
+            
+            <!-- Distance to go = total event distance subtracted by total accumulated activity distance -->
             <h3>Distance to go: <%= response.goals[idx].distanceToGo %> mile(s)</h3>
             
+            <!-- If total activity is greater than distance to go, remove add activity button and display congratulations message! -->
             <% if(response.goals[idx].completed == true) { %>
-                <h1>You crushed your goal!  Congratulations!</h1>
+                <h3 style="color: red">You crushed your goal!  Congratulations!</h1>
             <% } %>
-            
+            <hr>
         <% } %>
     <% } %>
     <h1>Empower yourself to meet your personal goals.</h1>

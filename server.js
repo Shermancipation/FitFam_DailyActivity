@@ -24,7 +24,7 @@ var runnersArr = [
 var randRunner = Math.floor(Math.random() * (runnersArr.length - 1) + 1);
 var goalsArr = [];
 
-
+// Main index page route that checks for activities and calculates current total distance and distance to go and adds them to relevant goal object in goals array 
 app.get('/', function(req, res)
 {
     var activityDistance = 0;
@@ -39,23 +39,24 @@ app.get('/', function(req, res)
             if(activityDistance >= parseFloat(goalsArr[i].distance))
                 {
                     goalsArr[i].completed = true;
+                    // Completed attribute defaults to false and updates to true once total activity distance eclipses event distance - triggers conditionals on index page
                 }
             goalsArr[i].activityDistance = activityDistance;
             goalsArr[i].distanceToGo = goalsArr[i].distance - activityDistance;
             activityDistance = 0;
         }
-
+    // Event and runner response attributes are simply to populate page header for unique feel.  The goals array contains most necessary functionality info
     var response = {
         event: eventsArr[randEvent],
         runner: runnersArr[randRunner],
         goals: goalsArr,
     }
-    console.log(goalsArr);
     res.render("index", {response: response});
 });
 
 app.post('/newgoal', function(req, res)
 {
+    // Conditional checks to add appropriate distance to goals object based on type selected
     var distance = '';
     if(req.body.type == "5k")
         {
@@ -73,6 +74,7 @@ app.post('/newgoal', function(req, res)
         {
             distance = req.body.custom;
         }
+    // Building goal object to be added to goals array
     goalsArr.push({
         type: req.body.type,
         distance: distance,
@@ -87,15 +89,12 @@ app.post('/newgoal', function(req, res)
 
 app.post('/newactivity', function(req, res)
 {
-    console.log(req.body.goalIdx);
+    // Building activity object to add to activities array within goal object
     goalsArr[req.body.goalIdx].activities.push({
         date: req.body.date,
         distance: req.body.distance,
         comment: req.body.comment
     })
-    for(var idx in goalsArr[req.body.goalIdx].activities){
-        console.log(goalsArr[req.body.goalIdx].activities[idx]);
-    }
     res.redirect('/');
 });
 
